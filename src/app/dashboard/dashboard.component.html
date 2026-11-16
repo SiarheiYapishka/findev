@@ -1,0 +1,35 @@
+<div class="dashboard-header">
+      <strong>Status:</strong> {{ (isPaused$ | async) ? 'Paused' : 'Running' }}
+      <button class="pause-btn" (click)="togglePause()">
+        {{ (isPaused$ | async) ? 'Resume' : 'Pause' }}
+      </button>
+    </div>
+    
+    <table class="metrics-table">
+      <thead>
+        <tr>
+          <th>Instrument</th>
+          <th>Last Price</th>
+          <th>Spread</th>
+          <th>Volume</th>
+          <th>VWAP</th>
+          <th>Imbalance</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (m of metrics$ | async; track m.symbol) {
+          <tr>
+            <td>{{ m.symbol }}</td>
+            <td>{{ m.lastPrice !== null ? (m.lastPrice | currency) : 'N/A' }}</td>
+            <td>{{ m.spread !== null ? (m.spread | currency) : 'N/A' }}</td>
+            <td>{{ m.volume }}</td>
+            <td>{{ m.vwap !== null ? (m.vwap | currency) : 'N/A' }}</td>
+            <td>{{ m.imbalance !== null ? (m.imbalance | number:'1.2-2') : 'N/A' }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="empty-state">Waiting for data...</td>
+          </tr>
+        }
+      </tbody>
+    </table>

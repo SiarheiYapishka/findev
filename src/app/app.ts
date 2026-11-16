@@ -1,11 +1,20 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SettingsComponent } from './settings/settings.component';
+import { MarketService } from './market.service';
 
 @Component({
-  imports: [],
   selector: 'app-root',
-  styleUrl: './app.scss',
-  templateUrl: './app.html',
+  imports: [CommonModule, DashboardComponent, SettingsComponent],
+  templateUrl: `./app.html`,
+  styleUrl: `./app.scss`
 })
-export class App {
-  protected readonly title = signal('findev');
+export class AppComponent implements OnInit {
+  view = 'dashboard';
+  constructor(private market: MarketService) {}
+
+  ngOnInit() {
+    this.market.startRun(this.market.currentSettings);
+  }
 }

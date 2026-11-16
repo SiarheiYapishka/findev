@@ -1,0 +1,19 @@
+<form [formGroup]="form" (ngSubmit)="apply()" class="settings-form">
+      <label class="settings-label">
+        Instrument Count (1-50):
+        <input type="number" formControlName="instrumentCount" class="settings-input">
+      </label>
+      <label class="settings-label">
+        Updates per batch (1-1000):
+        <input type="number" formControlName="updatesPerBatch" class="settings-input">
+      </label>
+      <label class="settings-label">
+        Batch interval ms (50-2000):
+        <input type="number" formControlName="batchInterval" class="settings-input">
+      </label>
+      <button type="submit" [disabled]="form.invalid" class="settings-button">Apply Settings & Restart</button>
+    </form>
+    
+@if (applied) {
+    <p class="success-msg">Settings applied! Run restarted.</p>
+}
