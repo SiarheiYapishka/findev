@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -8,7 +8,8 @@ import { MarketService } from './market.service';
   selector: 'app-root',
   imports: [CommonModule, DashboardComponent, SettingsComponent],
   templateUrl: `./app.html`,
-  styleUrl: `./app.scss`
+  styleUrl: `./app.scss`,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
   view = 'dashboard';

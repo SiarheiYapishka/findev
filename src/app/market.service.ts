@@ -1,23 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { InstrumentMetrics, MarketUpdate, ProducerSettings, WorkerMessage } from './models/market.types';
 
-export interface MarketUpdate {
-  instrument: string; priceCents: number; tradeQuantity: number;
-  bidCents: number; askCents: number; bidQuantity: number; askQuantity: number;
-}
 
-export interface InstrumentMetrics {
-  symbol: string; lastPrice: number | null; spread: number | null;
-  volume: number; vwap: number | null; imbalance: number | null;
-  _totalValueCents: number;
-}
-
-export interface ProducerSettings {
-  instrumentCount: number; updatesPerBatch: number; batchInterval: number;
-}
 
 @Injectable({ providedIn: 'root' })
-export class MarketService {
+export class MarketService implements OnDestroy {
   private worker?: Worker;
   private metricsMap = new Map<string, InstrumentMetrics>();
   
@@ -40,8 +28,10 @@ export class MarketService {
     }
 
     this.worker = new Worker(new URL('./market.worker', import.meta.url), { type: 'module' });
-    this.worker.onmessage = ({ data }) => {
-      if (data.type === 'BATCH') this.processBatch(data.payload);
+    this.worker.onmessage = ({ data }: MessageEvent<WorkerMessage>) => {
+      if (data.type === 'BATCH' && data.payload) {
+        this.processBatch(data.payload);
+      }
     };
 
     this.worker.postMessage({ type: 'INIT', config: settings });
@@ -75,5 +65,12 @@ export class MarketService {
       metric.imbalance = totalDepth === 0 ? null : (update.bidQuantity - update.askQuantity) / totalDepth;
     });
     this.metrics$.next(Array.from(this.metricsMap.values()));
+  }
+
+  ngOnDestroy() {
+    if (this.worker) {
+      this.worker.postMessage({ type: 'STOP' });
+      this.worker.terminate();
+    }
   }
 }
