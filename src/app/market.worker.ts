@@ -27,7 +27,7 @@ addEventListener('message', async ({ data }) => {
           
           wasmExports = wasmModule.instance.exports;
         } catch (e) {
-          console.error("Ошибка при загрузке WebAssembly:", e);
+          console.error("Error when loading WebAssembly:", e);
           return;
         }
       }
