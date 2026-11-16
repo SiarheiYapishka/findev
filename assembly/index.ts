@@ -2,10 +2,8 @@ const UPDATE_SIZE = 7;
 let instrumentBasePrices: Int32Array = new Int32Array(0);
 let instrumentCount: i32 = 0;
 
-// Выделяем фиксированный буфер в памяти
 export const batchBuffer = new Int32Array(1000 * UPDATE_SIZE);
 
-// Экспортируем указатель на буфер, чтобы JS мог его прочитать
 export function getBufferPointer(): usize {
   return batchBuffer.dataStart;
 }
