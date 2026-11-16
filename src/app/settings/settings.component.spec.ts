@@ -18,7 +18,7 @@ describe('SettingsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('должен инициализироваться с валидными дефолтными настройками', () => {
+  it('inits with valid default settings', () => {
     expect(component.form.valid).toBe(true);
     expect(component.form.value).toEqual({
       instrumentCount: 5,
@@ -27,7 +27,7 @@ describe('SettingsComponent', () => {
     });
   });
 
-  it('должен валидировать количество инструментов (1-50)', () => {
+  it('validates amount of instruments', () => {
     const control = component.form.get('instrumentCount');
     control?.setValue(0);
     expect(control?.valid).toBe(false);
@@ -39,7 +39,7 @@ describe('SettingsComponent', () => {
     expect(control?.valid).toBe(true);
   });
 
-  it('должен валидировать количество обновлений в батче (1-1000)', () => {
+  it('validates amount of updates in batches', () => {
     const control = component.form.get('updatesPerBatch');
     control?.setValue(0);
     expect(control?.valid).toBe(false);
@@ -51,7 +51,7 @@ describe('SettingsComponent', () => {
     expect(control?.valid).toBe(true);
   });
 
-  it('должен валидировать интервал (50-2000)', () => {
+  it('validates interval', () => {
     const control = component.form.get('batchInterval');
     control?.setValue(49);
     expect(control?.valid).toBe(false);

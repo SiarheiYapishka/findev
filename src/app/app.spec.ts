@@ -5,7 +5,6 @@ import { BehaviorSubject } from 'rxjs';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
-    // Мокаем сервис, так как компонент вызывает startRun в ngOnInit
     const mockMarketService = {
       startRun: () => {},
       currentSettings: { instrumentCount: 5, updatesPerBatch: 100, batchInterval: 500 },
@@ -21,7 +20,7 @@ describe('AppComponent', () => {
     }).compileComponents();
   });
 
-  it('должен создаваться', () => {
+  it('creates', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();

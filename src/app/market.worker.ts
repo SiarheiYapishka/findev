@@ -1,4 +1,3 @@
-/// <reference lib="webworker" />
 
 let wasmExports: any = null;
 let isPaused = false;
@@ -12,20 +11,17 @@ addEventListener('message', async ({ data }) => {
       config = data.config;
       if (!wasmExports) {
         try {
-          // Скачиваем файл
           const response = await fetch('/release.wasm');
           if (!response.ok) {
             throw new Error(`Failed to fetch wasm: ${response.statusText}`);
           }
           
-          // Читаем как сырой буфер (надежнее, чем instantiateStreaming)
           const buffer = await response.arrayBuffer();
           
-          // Инициализируем с нужными для AssemblyScript функциями
           const wasmModule = await WebAssembly.instantiate(buffer, {
             env: { 
               abort: (msg: any, file: any, line: any, col: any) => console.error(`Wasm aborted at ${line}:${col}`),
-              seed: () => Date.now() // Нужно для работы Math.random() в Wasm
+              seed: () => Date.now()
             }
           });
           
