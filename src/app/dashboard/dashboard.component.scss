@@ -1,10 +1,10 @@
 .dashboard-header {
-  margin-bottom: 15px;
+  margin-bottom: 0.9375rem; /* 15px */
 }
 
 .pause-btn {
-  margin-left: 15px;
-  padding: 5px 15px;
+  margin-left: 0.9375rem; /* 15px */
+  padding: 0.3125rem 0.9375rem; /* 5px 15px */
   cursor: pointer;
 }
 
@@ -16,7 +16,7 @@
 
   th, td {
     border: 1px solid #ccc;
-    padding: 8px;
+    padding: 0.5rem;
   }
 
   thead th {
@@ -26,5 +26,5 @@
 
 .empty-state {
   text-align: center;
-  padding: 20px;
+  padding: 1.25rem;
 }
