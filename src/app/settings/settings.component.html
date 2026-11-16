@@ -14,6 +14,6 @@
       <button type="submit" [disabled]="form.invalid" class="settings-button">Apply Settings & Restart</button>
     </form>
     
-@if (applied) {
+@if (applied$ | async) {
     <p class="success-msg">Settings applied! Run restarted.</p>
 }

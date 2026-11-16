@@ -64,20 +64,26 @@ describe('SettingsComponent', () => {
   });
 
   it('calls market.startRun and shows success message', () => {
-    vi.useFakeTimers(); // Включаем перехват таймеров в Vitest
+    vi.useFakeTimers(); 
 
     const marketService = TestBed.inject(MarketService);
     vi.spyOn(marketService, 'startRun').mockImplementation(() => {});
+
+    const emittedValues: boolean[] = [];
+    const subscription = component.applied$.subscribe(val => emittedValues.push(val));
 
     component.form.setValue({ instrumentCount: 10, updatesPerBatch: 50, batchInterval: 1000 });
     component.apply();
 
     expect(marketService.startRun).toHaveBeenCalledWith({ instrumentCount: 10, updatesPerBatch: 50, batchInterval: 1000 });
-    expect(component.applied).toBe(true);
+    
+    expect(emittedValues).toEqual([true]);
 
     vi.advanceTimersByTime(2000); 
-    expect(component.applied).toBe(false);
+    
+    expect(emittedValues).toEqual([true, false]);
 
+    subscription.unsubscribe();
     vi.useRealTimers(); 
   });
 
