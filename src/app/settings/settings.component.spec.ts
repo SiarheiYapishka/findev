@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { SettingsComponent } from './settings.component';
 import { MarketService } from '../market.service';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { vi } from 'vitest';
 describe('SettingsComponent', () => {
   let component: SettingsComponent;
   let fixture: ComponentFixture<SettingsComponent>;
@@ -61,5 +61,33 @@ describe('SettingsComponent', () => {
     
     control?.setValue(1000);
     expect(control?.valid).toBe(true);
+  });
+
+  it('calls market.startRun and shows success message', () => {
+    vi.useFakeTimers(); // Включаем перехват таймеров в Vitest
+
+    const marketService = TestBed.inject(MarketService);
+    vi.spyOn(marketService, 'startRun').mockImplementation(() => {});
+
+    component.form.setValue({ instrumentCount: 10, updatesPerBatch: 50, batchInterval: 1000 });
+    component.apply();
+
+    expect(marketService.startRun).toHaveBeenCalledWith({ instrumentCount: 10, updatesPerBatch: 50, batchInterval: 1000 });
+    expect(component.applied).toBe(true);
+
+    vi.advanceTimersByTime(2000); 
+    expect(component.applied).toBe(false);
+
+    vi.useRealTimers(); 
+  });
+
+  it('doesnt call market.startRun when form is invalid', () => {
+    const marketService = TestBed.inject(MarketService);
+    vi.spyOn(marketService, 'startRun');
+
+    component.form.controls['instrumentCount'].setValue(0); 
+    component.apply();
+
+    expect(marketService.startRun).not.toHaveBeenCalled();
   });
 });
